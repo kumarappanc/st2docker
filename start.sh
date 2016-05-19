@@ -23,14 +23,9 @@ rm -rf /tmp/st2contrib
 rm -rf /tmp/st2docker
 /usr/bin/st2ctl start
 /usr/bin/st2ctl reload
-service nginx start
+
 echo "Sleep for 10 seconds while services start..."
 sleep 10
 
-ps cax | grep nginx > /dev/null
-if [ $? -eq 0 ]; then
-  echo "nginx is running."
-  exec "tail -10f /var/log/st2/st2api.log"
-else
-  echo "Process is not running."
-fi
+echo "Starting nginx..."
+exec $(which nginx) -g "daemon off;"
