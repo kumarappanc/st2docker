@@ -24,7 +24,10 @@ rm -rf /tmp/st2docker
 
 for pack in "/tmp/st2contrib/packs/"*
 do
-  st2 run packs.install packs=$(basename $pack)
+  if [ ! -d /opt/stackstorm/packs/$(basename $pack) ]
+  then
+    st2 run packs.install packs=$(basename $pack)
+  fi
 done
 
 rm -rf /tmp/st2contrib
