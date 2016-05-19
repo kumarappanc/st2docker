@@ -21,12 +21,12 @@ cp -a -r -n /tmp/st2docker/packs/* /opt/stackstorm/packs
 rm -rf /tmp/st2docker
 /usr/bin/st2ctl start
 /usr/bin/st2ctl reload
-
+TOKEN=(`st2 auth devops -p Test123 | grep token | awk -F'|' '{print $3}'`)
 for pack in "/tmp/st2contrib/packs/"*
 do
   if [ ! -d /opt/stackstorm/packs/$(basename $pack) ]
   then
-    st2 run packs.install packs=$(basename $pack)
+    st2 run packs.install packs=$(basename $pack) -t ${TOKEN}
   fi
 done
 
