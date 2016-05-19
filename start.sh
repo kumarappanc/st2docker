@@ -27,5 +27,10 @@ service nginx start
 echo "Sleep for 10 seconds while services start..."
 sleep 10
 
-if [ -z $ST2_SERVICE ]; then
-  [ $# -gt 0 ] && exec "$@" || exec /bin/bash
+ps cax | grep nginx > /dev/null
+if [ $? -eq 0 ]; then
+  echo "nginx is running."
+  exec "tail -10f /var/log/st2/st2api.log"
+else
+  echo "Process is not running."
+fi
