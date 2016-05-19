@@ -17,12 +17,17 @@ else
   /opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf upgrade head
   /opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf populate
 fi
-cp -a -r -n /tmp/st2contrib/packs/* /opt/stackstorm/packs
 cp -a -r -n /tmp/st2docker/packs/* /opt/stackstorm/packs
-rm -rf /tmp/st2contrib
 rm -rf /tmp/st2docker
 /usr/bin/st2ctl start
 /usr/bin/st2ctl reload
+
+for pack in "/tmp/st2contrib/packs/"*
+do
+  st2 run packs.install packs=$(basename $pack)
+done
+
+rm -rf /tmp/st2contrib
 
 echo "Sleep for 10 seconds while services start..."
 sleep 10
