@@ -18,18 +18,28 @@ else
   /opt/stackstorm/mistral/bin/mistral-db-manage --config-file /etc/mistral/mistral.conf populate
 fi
 cp -a -r -n /tmp/st2docker/packs/* /opt/stackstorm/packs
-rm -rf /tmp/st2docker
+
 /usr/bin/st2ctl start
 /usr/bin/st2ctl reload
-TOKEN=`st2 auth devops -p Test123 | grep token | awk -F'|' '{print $3}'`
-for pack in "/tmp/st2contrib/packs/"*
-do
-  if [ ! -d /opt/stackstorm/packs/$(basename $pack) ]
-  then
-    st2 run packs.install packs=$(basename $pack) -t ${TOKEN}
-  fi
-done
+echo $1
+echo $2
+user_list= $1
+username = $2
 
+if [ -n "$user_list" ]
+then
+  python /tmp/st2docker/add_user.py ${user_list}
+  password=`python /tmp/st2docker/get_user_password.py ${username} ${user_list}
+  TOKEN=`st2 auth devops -p ${password} | grep token | awk -F'|' '{print $3}'`
+  for pack in "/tmp/st2contrib/packs/"*
+  do
+    if [ ! -d /opt/stackstorm/packs/$(basename $pack) ]
+    then
+      st2 run packs.install packs=$(basename $pack) -t ${TOKEN}
+    fi
+  done
+fi
+rm -rf /tmp/st2docker
 rm -rf /tmp/st2contrib
 
 echo "Sleep for 10 seconds while services start..."
