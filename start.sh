@@ -23,8 +23,8 @@ cp -a -r -n /tmp/st2docker/packs/* /opt/stackstorm/packs
 /usr/bin/st2ctl reload
 echo $1
 echo $2
-user_list= "$1"
-username= "$2"
+user_list=$1
+username=$2
 
 if [ -n "$user_list" ]
 then
