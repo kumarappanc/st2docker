@@ -1,6 +1,8 @@
 #!/bin/sh
 /etc/init.d/postgresql start
 /etc/init.d/rabbitmq-server start
+/usr/sbin/rabbitmq-plugins enable rabbitmq_management
+/etc/init.d/rabbitmq-server restart
 /etc/init.d/mongodb start
 if (sudo -u  postgres psql -c "SELECT usename from pg_user WHERE usename = 'StackStorm';" --quiet | grep "1 row" --quiet)
 then

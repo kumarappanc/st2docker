@@ -103,6 +103,9 @@ EXPOSE 9101
 # webui
 EXPOSE 8080
 
+#RabbitMQ Management
+EXPOSE 15672
+
 
 RUN mkdir /root/st2 && cp -f /tmp/st2docker/start.sh /root/st2/start.sh
 
